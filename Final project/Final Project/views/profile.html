@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Profile</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+
+
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
+
+  <div class="jumbotron">
+    <h1 class="display-4">Welcome to your Personalized Horoscope page</h1>
+    <p class="lead">This is the page where you can find your daily, weekly horoscope details for your selected
+      Astrological sign when you signed up.</p>
+    <p>Free Perk: You can also select other signs from the dropbox and check the status out toooo :)</p>
+    <hr class="my-4">
+    <h2 id="user-horo"></h2>
+
+  </div>
+  <select name="sunSign" id="sunsign-selection">
+    <option value="none" selected disabled hidden>Please select a sunSign</option>
+    <option value="Aries">Aries</option>
+    <option value="Taurus">Taurus</option>
+    <option value="Gemini">Gemini</option>
+    <option value="Cancer">Cancer</option>
+    <option value="Leo">Leo</option>
+    <option value="Virgo">Virgo</option>
+    <option value="Libra">Libra</option>
+    <option value="Scorpio">Scorpio</option>
+    <option value="Capricon">Capricon</option>
+    <option value="Sagittarius">Sagittarius</option>
+    <option value="Aquarius">Aquarius</option>
+    <option value="Pisces">Pisces</option>
+  </select>
+  <select name="day" id="day-selection">
+    <option value="today">Today</option>
+    <option value="week">Week</option>
+    <option value="month">Month</option>
+    <option value="year">Year</option>
+  </select>
+  <button id="get-button">Find Out</button>
+  <div style="margin-left: 50px;">
+    <p id="sign"></p>
+    <p id="time-period"></p>
+    <p id="output"></p>
+  </div>
+  <script type="text/javascript">
+    document.getElementById("user-horo").innerHTML = "You're " + localStorage.getItem("user-sign");
+    var sunSign;
+    var day;
+    var url = `/find?sign=` + sunSign + "&day=" + day;
+
+    //this one's the default call
+    sunSign = localStorage.getItem("user-sign");
+    day = "today";
+    url = `/find?sign=` + sunSign + "&day=" + day;
+    fetch(url).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      console.log(data.horoscope);
+      document.getElementById("output").innerHTML = data.horoscope.replace("Ganesha", "Elon Musk");
+      document.getElementById("time-period").innerHTML = day;
+    }).catch(function (error) {
+
+    });
+
+
+    let getButton = document.getElementById("get-button");
+    //on user's request
+    getButton.addEventListener("click", function () {
+      sunSign = document.getElementById("sunsign-selection").value;
+      day = document.getElementById("day-selection").value;
+      console.log(day);
+      url = `/find?sign=` + sunSign + "&day=" + day;
+      fetch(url).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        console.log(data.horoscope);
+        document.getElementById("output").innerHTML = data.horoscope.replace("Ganesha", "Elon Musk");
+        document.getElementById("time-period").innerHTML = day;
+      }).catch(function (error) {});
+    });
+  </script>
+  <div style="margin:20px;">
+    <button type="button" class="btn btn-outline-warning"><a href="/">Log Out</a></button></div>
+
+
+
+</body>
+
+</html>
